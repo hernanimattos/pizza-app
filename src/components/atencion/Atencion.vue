@@ -1,6 +1,5 @@
 <template>
 	<section>
-
 		<b-message
 			title="Atencão"
 			type="is-warning"
