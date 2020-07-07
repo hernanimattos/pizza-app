@@ -4,7 +4,17 @@
 
 ```
 nodejs
-[pizza-api] (https://github.com.br/hernanimatto/pizza-api)
+```
+
+Pizza api link -> [pizza-api](https://github.com.br/hernanimattos/pizza-api)
+
+## To Run
+
+```
+run  `npm i or yarn` in project folder to install dependencies
+
+yarn or npm serve
+
 ```
 
 ### Compiles and hot-reloads for development
