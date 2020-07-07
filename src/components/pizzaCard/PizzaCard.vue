@@ -1,5 +1,5 @@
 <template>
-	<section class="content ">
+	<section class="content">
 		<div class="card">
 			<header class="card-header">
 				<p class="card-header-title">

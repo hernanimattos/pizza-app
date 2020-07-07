@@ -1,18 +1,19 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Provider from '../provider/Provider';
-console.log(Provider);
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
     pizza: {
       namespaced: true,
+      orderStatus: {},
       state: {
         sizes: [],
         fillings: [],
         doughs: [],
-        pizzaOfTheDay: {},
+        pizzaOfTheDay: [],
         pizza: {
           size: '',
           filling: '',
@@ -41,6 +42,12 @@ export default new Vuex.Store({
         setPizzasDoughs(state, payload) {
           state.doughs = payload;
         },
+        setPizzasPromotion(state, payload) {
+          state.pizzaOfTheDay = payload;
+        },
+        setOrderSuccess(state, payload) {
+          state.orderStatus = payload
+        }
       },
       actions: {
         getPizzaSize({
@@ -63,7 +70,6 @@ export default new Vuex.Store({
         }, payload) {
           commit('controlSteps', payload);
         },
-
         async getPizzasSizes({
           commit
         }, payload) { // eslint-disable-line
@@ -107,6 +113,54 @@ export default new Vuex.Store({
             Promise.reject();
           }
         },
+
+        async getPizzasInPromotion({
+          commit
+        }, palyload) { // eslint-disable-line
+          try {
+            const {
+              data
+            } = await Provider.get('/product/promotion')
+            commit('setPizzasPromotion', data);
+            Promise.resolve();
+          } catch (e) {
+            console.log('erro=>', e);
+            Promise.reject();
+          }
+        },
+        async paymentPromtionPizza({
+          commit // eslint-disable-line
+        }, id) { // eslint-disable-line
+          try {
+            const {
+              data
+            } = await Provider.post('/product/order-promotion', {
+              id: id
+            });
+            commit('setOrderSuccess', data);
+            Promise.resolve();
+          } catch (e) {
+            console.log('erro=>', e);
+            Promise.reject();
+          }
+
+        },
+        async paymentPizza({
+          commit // eslint-disable-line
+        }, id) { // eslint-disable-line
+          try {
+            const {
+              data
+            } = await Provider.post('/product/order', {
+              id: id
+            });
+            commit('setOrderSuccess', data);
+            Promise.resolve();
+          } catch (e) {
+            console.log('erro=>', e);
+            Promise.reject();
+          }
+        }
       },
     },
   },

@@ -14,7 +14,11 @@ class Provider {
 	}
 	async get(url) {
 		return await this.axios.get(url);
-	}
+  }
+
+  async post(url, params){
+    return await this.axios.post(url, {...params})
+  }
 }
 
 export default new Provider();

@@ -13,6 +13,27 @@
 				@click="changeStep"
 			>{{nextText}}</b-button>
 		</div>
+		<b-notification
+			v-if="errors.length > 0"
+			type="is-danger"
+			aria-close-label="Close notification"
+			role="alert"
+		>
+			<p
+				v-for="(error, i) in errors"
+				:key="i"
+			> Você ainda não escolheu <router-link :to="error.path">{{error.name}}
+				</router-link>
+			</p>
+		</b-notification>
+		<div class="buttons">
+			<b-button
+				type="is-primary"
+				expanded
+				@click="payment"
+			>Comprar
+			</b-button>
+		</div>
 	</div>
 </template>
 
@@ -22,14 +43,52 @@ const { mapState, mapActions } = createNamespacedHelpers('pizza');
 
 export default {
 	name: 'ControlStep',
+	data() {
+		return {
+			errors: []
+		};
+	},
 	computed: {
-		...mapState(['step'])
+		...mapState(['step', 'pizza'])
 	},
 	methods: {
-		...mapActions(['controlSteps']),
+		...mapActions(['controlSteps', 'paymentPizza']),
 		changeStep() {
 			this.$router.push(this.nextStep);
 			this.controlSteps(this.nextStep);
+		},
+		payment() {
+			this.pizzaRequisitsError();
+
+			if (this.errors.length == 0) {
+				this.paymentPizza(this.pizza).then(() => {
+					this.$router.push('finish-order');
+				});
+			}
+		},
+
+		pizzaRequisitsError() {
+			const translate = {
+				size: {
+					path: '/',
+					name: 'tamanho'
+				},
+				filling: {
+					path: 'sabor',
+					name: 'sabor'
+				},
+				dough: {
+					path: 'massa',
+					name: 'massa'
+				}
+			};
+			this.errors = Object.keys(this.pizza)
+				.map(key => {
+					if (this.pizza[key].length == 0) {
+						return translate[key];
+					}
+				})
+				.filter(v => v != undefined);
 		}
 	},
 	props: {

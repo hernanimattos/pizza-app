@@ -6,8 +6,8 @@
 			<PizzaSize />
 		</div>
 		<ControlStep
-			next-text="Recheio"
-			next-step="recheio"
+			next-text="Sabor"
+			next-step="sabor"
 		/>
 	</div>
 </template>
